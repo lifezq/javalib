@@ -14,7 +14,7 @@ public class DelayRunnableQueue implements Runnable {
     private final int timeElapsed;
     private final TimeUnit timeUnit;
     private final DelayRunnable func;
-    private ArrayDeque<com.yql.queue.QueueData> queueData = new ArrayDeque<>();
+    private ArrayDeque<QueueData> queueData = new ArrayDeque<>();
 
 
     public DelayRunnableQueue(int timeElapsed, TimeUnit timeUnit, DelayRunnable func) {
@@ -28,13 +28,13 @@ public class DelayRunnableQueue implements Runnable {
     }
 
     public synchronized boolean push(Object data) {
-        com.yql.queue.QueueData qd = new com.yql.queue.QueueData();
+        QueueData qd = new QueueData();
         qd.setData(data);
         qd.setCreated(new Date());
         return queueData.add(qd);
     }
 
-    public synchronized com.yql.queue.QueueData pop() {
+    public synchronized QueueData pop() {
         return this.queueData.poll();
     }
 
@@ -49,7 +49,7 @@ public class DelayRunnableQueue implements Runnable {
     @Override
     public void run() {
 
-        com.yql.queue.QueueData qd;
+        QueueData qd;
 
         while (true) {
 
@@ -74,7 +74,7 @@ public class DelayRunnableQueue implements Runnable {
                 }
 
                 qd = this.pop();
-                com.yql.queue.ThreadQueue threadQueue = new com.yql.queue.ThreadQueue();
+                ThreadQueue threadQueue = new ThreadQueue();
                 threadQueue.setQueueData(qd);
                 threadQueue.setDelayRunnable(this.func);
                 threadQueue.start();
